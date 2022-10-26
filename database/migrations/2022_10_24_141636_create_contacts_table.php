@@ -17,9 +17,9 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('first_name');
             $table->string('last_name');
-            $table->string('email')->nullable();
-            $table->string('mobile', 20)->nullable();
-            $table->text('comments');
+            $table->string('email')->unique()->nullable();
+            $table->string('mobile', 20)->unique();
+            $table->text('comments')->nullable();
             $table->enum('status', ['new', 'in_progress', 'cancelled'])->default('new');
             $table->timestamps();
         });

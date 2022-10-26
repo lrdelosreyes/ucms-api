@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\Contact;
 use App\Repositories\ContactRepository;
 use Illuminate\Http\JsonResponse;
+use PhpParser\Node\Stmt\TryCatch;
 
 class ContactController extends Controller
 {
@@ -27,34 +28,28 @@ class ContactController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\StoreContactRequest  $request
      * @return ContactResource
      */
-    public function store(Request $request, ContactRepository $repository)
+    public function store(StoreContactRequest $request, ContactRepository $repository)
     {
-        $created = $repository->create($request->only([
-            'first_name',
-            'last_name',
-            'email',
-            'mobile',
-            'comments',
-            'address_physical',
-            'address_billing'
-        ]));
+        try {
+            $created = $repository->create($request->only([
+                'first_name',
+                'last_name',
+                'email',
+                'mobile',
+                'comments',
+                'address_physical',
+                'address_billing'
+            ]));
 
-        return new ContactResource($created);
+            return new ContactResource($created);
+        } catch (\Exception $ex) {
+            abort(500);
+        }
     }
 
     /**
@@ -69,54 +64,47 @@ class ContactController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Contact  $contact
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function edit(Contact $contact)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \App\Http\Requests\UpdateContactRequest  $request
      * @param  \App\Models\Contact  $contact
      * @return ContactResource | JsonResponse
      */
-    public function update(Request $request, Contact $contact, ContactRepository $repository)
+    public function update(UpdateContactRequest $request, Contact $contact, ContactRepository $repository)
     {
-        $updated = $repository->update($contact, $request->only([
-            'first_name',
-            'last_name',
-            'email',
-            'mobile',
-            'comments',
-        ]));
+        try {
+            $updated = $repository->update($contact, $request->only([
+                'first_name',
+                'last_name',
+                'email',
+                'mobile',
+                'comments',
+                'address_physical_id',
+                'address_physical',
+                'address_billing_id',
+                'address_billing',
+            ]));
 
-        return new ContactResource($updated);
+            return new ContactResource($updated);
+        } catch (\Exception $ex) {
+            abort(500);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Contact  $contact
-     * @return ContactResource | JsonResponse
+     * @return Illuminate\Http\JsonResponse
      */
-    public function destroy(Contact $contact)
+    public function destroy(Contact $contact, ContactRepository $repository)
     {
-        $deleted = $contact->forceDelete();
+        $deleted = $repository->forceDelete($contact);
 
-        if (!$deleted) {
+        if ($deleted) {
             return new JsonResponse([
-                'errors' => [
-                    'Could not delete resource.'
-                ]
-            ], 400);
+                'data' => 'success'
+            ]);
         }
-
-        return new ContactResource($deleted);
     }
 }
