@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Contact extends Model
+class ContactTransaction extends Model
 {
     use HasUuids, HasFactory;
 
@@ -16,19 +16,13 @@ class Contact extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'first_name',
-        'last_name',
-        'email',
-        'mobile',
-        'comments',
-        'status'
+        'contact_id',
+        'sales_id',
+        'date_contacted',
+        'notes'
     ];
 
-    public function addresses() {
-        return $this->belongsToMany(Address::class);
-    }
-
-    public function contact_transactions() {
-        return $this->hasMany(ContactTransaction::class);
+    public function contacts() {
+        return $this->belongsTo(Contact::class);
     }
 }

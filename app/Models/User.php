@@ -50,4 +50,8 @@ class User extends Authenticatable
     public function roles() {
         return $this->belongsToMany(Role::class);
     }
+
+    public function contact_transactions() {
+        return $this->hasMany(ContactTransaction::class);
+    }
 }
