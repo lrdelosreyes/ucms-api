@@ -17,6 +17,8 @@ class ContactSeeder extends Seeder
     public function run()
     {
         Contact::factory(100)->create()->each(function($contact) {
+            $contactId = $contact->id;
+
             $addressPhysical = Address::create([
                 'address_type' => 'physical',
                 'address' => fake()->address()

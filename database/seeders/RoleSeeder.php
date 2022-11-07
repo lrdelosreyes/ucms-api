@@ -20,7 +20,7 @@ class RoleSeeder extends Seeder
             'description' => fake()->paragraph()
         ]);
         Role::create([
-            'name' => 'USER',
+            'name' => 'SALES',
             'description' => fake()->paragraph()
         ]);
     }
