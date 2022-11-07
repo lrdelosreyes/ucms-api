@@ -12,7 +12,7 @@ A simple web-based application for managing contacts.
 ```
 > composer install
 > php artisan key:generate
-> php artisan migrate:fresh --see
+> php artisan migrate:fresh --seed
 > php artisan serve
 ```
 
